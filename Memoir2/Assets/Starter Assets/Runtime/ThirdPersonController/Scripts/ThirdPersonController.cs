@@ -59,6 +59,10 @@ namespace StarterAssets
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float GroundedRadius = 0.28f;
 
+
+        //Ethan Force ground check for painted walls
+        public bool PaintedWallForceCheck = false;
+
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
@@ -183,8 +187,10 @@ namespace StarterAssets
             // set sphere position, with offset
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
+
+                Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+
+
 
             // update animator if using character
             if (_hasAnimator)
@@ -282,9 +288,27 @@ namespace StarterAssets
             }
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("PaintedWall"))
+            {
+                PaintedWallForceCheck = true;
+                Gravity = 0;
+                _input.jump = true;
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("PaintedWall"))
+            {
+                PaintedWallForceCheck = false;
+                Gravity = -15;
+
+            }
+        }
         private void JumpAndGravity()
         {
-            if (Grounded)
+            if (Grounded || PaintedWallForceCheck)
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
