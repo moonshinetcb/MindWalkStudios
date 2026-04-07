@@ -14,6 +14,7 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -61,7 +62,7 @@ namespace StarterAssets
 
 
         //Ethan Force ground check for painted walls
-        public bool PaintedWallForceCheck = false;
+        //public bool PaintedWallForceCheck = false;
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
@@ -91,8 +92,9 @@ namespace StarterAssets
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
-        private float _verticalVelocity;
+        public float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -141,6 +143,7 @@ namespace StarterAssets
 
         private void Start()
         {
+
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
             _hasAnimator = TryGetComponent(out _animator);
@@ -288,27 +291,29 @@ namespace StarterAssets
             }
         }
 
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag("PaintedWall"))
-            {
-                PaintedWallForceCheck = true;
-                Gravity = 0;
-                _input.jump = true;
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("PaintedWall"))
-            {
-                PaintedWallForceCheck = false;
-                Gravity = -15;
+        //sticking to the wall using grounded
+        //private void OnTriggerStay(Collider other)
+        //{
+        //    if (other.CompareTag("PaintedWall"))
+        //    {
+        //        PaintedWallForceCheck = true;
+        //        Gravity = 0;
+        //        _input.jump = true;
 
-            }
-        }
+        //    }
+        //}
+        //private void OnTriggerExit(Collider other)
+        //{
+        //    if (other.CompareTag("PaintedWall"))
+        //    {
+        //        PaintedWallForceCheck = false;
+        //        Gravity = -15;
+
+        //    }
+        //}
         private void JumpAndGravity()
         {
-            if (Grounded || PaintedWallForceCheck)
+            if (Grounded)
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using System;
 
 /// <summary>
 /// Controls paint mode toggling, shape selection and spawning.
@@ -23,6 +22,7 @@ public class PaintModeController : MonoBehaviour
 
     private PaintPrimitiveType[] allTypes; 
     private int currentTypeIndex;
+    private GameObject currentGhost;
 
     private void Awake()
     {
@@ -41,6 +41,28 @@ public class PaintModeController : MonoBehaviour
 
         currentTypeIndex = 0;
         currentType = allTypes[currentTypeIndex];
+        currentGhost = null;
+    }
+
+    private void SpawnGhost()
+    {
+        if (currentGhost != null)
+        {
+            Destroy(currentGhost);
+        }
+        if (primitiveMap.ContainsKey(currentType) && primitiveMap[currentType].ghostPrefab != null)
+        {
+            currentGhost = Instantiate(primitiveMap[currentType].ghostPrefab, spawnAnchor.position, Quaternion.identity);
+        }
+    }
+
+    private void DestroyGhost()
+    {
+        if (currentGhost != null)
+        {
+            Destroy(currentGhost);
+            currentGhost = null;
+        }
     }
 
     private void Update()
@@ -54,13 +76,27 @@ public class PaintModeController : MonoBehaviour
 
         if (keyboard.qKey.wasPressedThisFrame)
         {
+            // Toggle paint mode that lets the next part of the code can run
             inPaintMode = !inPaintMode;
+            if (inPaintMode)
+            {
+                SpawnGhost();
+            }
+            else
+            {
+                DestroyGhost();
+            }
             Debug.Log("Paint mode toggled: " + inPaintMode);
         }
-        // Nothing below this will run unless we're in paint mode
+        // Nothing below this will run unless we're in paint mode, handles placing and cycling between shapes
         if (!inPaintMode)
         {
             return;
+        }
+
+        if (currentGhost != null)
+        {
+            currentGhost.transform.position = spawnAnchor.position;
         }
 
         float scroll = mouse.scroll.y.ReadValue();
@@ -82,6 +118,10 @@ public class PaintModeController : MonoBehaviour
     {
         currentTypeIndex = (currentTypeIndex + direction + allTypes.Length) % allTypes.Length;
         currentType = allTypes[currentTypeIndex];
+        if (inPaintMode)
+        {
+            SpawnGhost();
+        }
         Debug.Log("Selected shape: " + currentType);
     }
 
@@ -98,10 +138,15 @@ public class PaintModeController : MonoBehaviour
             Debug.LogError("No prefab found for " + currentType);
             return;
         }
-
+        
+        // Destroys the ghost when placing and respawns it after
+        DestroyGhost();
+        
         PrimitivePrefabEntry entry = primitiveMap[currentType];
         Instantiate(entry.prefab, spawnAnchor.position, Quaternion.identity);
         placedCounts[currentType]++;
         Debug.Log("Placed " + currentType + " (" + placedCounts[currentType] + "/" + maxPerType + ")");
+        
+        SpawnGhost();
     }
 }
