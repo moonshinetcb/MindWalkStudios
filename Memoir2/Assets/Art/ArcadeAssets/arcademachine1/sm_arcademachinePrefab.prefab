@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: e967eaaa9d9610a4cabdaa3ef896d427, type: 2}
     - target: {fileID: 919132149155446097, guid: 703cb319f709b6f429130b8a383bcb4c, type: 3}
       propertyPath: m_Name
-      value: sm_arcademachine
+      value: sm_arcademachinePrefab
       objectReference: {fileID: 0}
     - target: {fileID: 2609636043145550836, guid: 703cb319f709b6f429130b8a383bcb4c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
