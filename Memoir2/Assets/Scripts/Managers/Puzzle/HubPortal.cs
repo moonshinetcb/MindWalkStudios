@@ -12,35 +12,25 @@ public class HubPortal : MonoBehaviour
     {
         if (puzzlePieces.Length != 4)
             Debug.LogWarning("Portal must have exactly 4 puzzle pieces!");
-    }
-
-    private void Update()
-    {
         RefreshVisuals();
     }
 
     public void RefreshVisuals()
     {
         if (PlayerData.Instance == null) return;
+
         var progress = PlayerData.Instance.levels[levelIndex];
 
         for (int i = 0; i < puzzlePieces.Length; i++)
         {
             bool collected = progress.piecesCollected[i];
-            var rend = puzzlePieces[i].GetComponent<Renderer>();
-            if (rend != null)
-            {
-                Color c = rend.material.color;
-                c.a = collected ? 1f : 0.2f; // filled or blank
-                rend.material.color = c;
-            }
+            puzzlePieces[i].SetActive(collected); // Only show in hub if collected
         }
     }
 
     // Static helper to update portals on piece collection
-    public static void UpdatePortal(int levelIndex, int pieceIndex)
+    public static void UpdatePortal(int levelIndex)
     {
-        // Modern Unity API to replace obsolete FindObjectsOfType
         var portals = Object.FindObjectsByType<HubPortal>(FindObjectsSortMode.None);
 
         foreach (var p in portals)

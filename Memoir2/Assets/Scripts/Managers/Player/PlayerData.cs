@@ -122,7 +122,7 @@ public class PlayerData : MonoBehaviour
         Debug.Log($"Level {levelIndex + 1}, Piece {pieceIndex + 1} collected!");
 
         // Optional: notify hub portal
-        HubPortal.UpdatePortal(levelIndex, pieceIndex);
+        HubPortal.UpdatePortal(levelIndex);
     }
 
     public bool IsLevelComplete(int levelIndex)

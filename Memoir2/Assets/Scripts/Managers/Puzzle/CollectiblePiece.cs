@@ -11,6 +11,19 @@ public class CollectiblePiece : MonoBehaviour
 
     private bool collected = false;
 
+    private void Start()
+    {
+        // Hide/fade piece if already collected
+        if (PlayerData.Instance != null)
+        {
+            if (PlayerData.Instance.levels[levelIndex].piecesCollected[pieceIndex])
+            {
+                collected = true;
+                SetCollectedVisual();
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (collected) return;
@@ -21,14 +34,18 @@ public class CollectiblePiece : MonoBehaviour
         // Update PlayerData
         PlayerData.Instance.CollectPiece(levelIndex, pieceIndex);
 
-        // Make piece semi-transparent in the world
+        SetCollectedVisual();
+    }
+
+    private void SetCollectedVisual()
+    {
         if (visualObject != null)
         {
             var rend = visualObject.GetComponent<Renderer>();
             if (rend != null)
             {
                 Color c = rend.material.color;
-                c.a = 0.25f;
+                c.a = 0.25f; // semi-transparent in-level
                 rend.material.color = c;
             }
         }
