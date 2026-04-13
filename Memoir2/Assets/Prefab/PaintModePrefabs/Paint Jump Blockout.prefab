@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7835923965351041118}
   - component: {fileID: 1106565275382292051}
   - component: {fileID: 6165173432054747285}
+  - component: {fileID: 3667244585996511404}
   m_Layer: 0
   m_Name: Paint Jump Blockout
   m_TagString: Untagged
@@ -105,9 +106,22 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3667244585996511404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43244732372569424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c86a1cf38a0304d842c313956e8b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BouncyPlatform
+  bounceForce: 10

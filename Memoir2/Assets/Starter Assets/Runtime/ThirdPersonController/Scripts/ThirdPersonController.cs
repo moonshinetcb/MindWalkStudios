@@ -324,9 +324,12 @@ namespace StarterAssets
                 IsOnWall = false;
             }
         }
-
-
-
+        
+        // For the bounce pad to make the player bounce
+        public void ApplyBounce(float force)
+        {
+            _verticalVelocity = force;
+        }
 
 
         private void JumpAndGravity()
